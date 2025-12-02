@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" />
+<link rel="stylesheet" type="text/css" href="../themes/solitudeCherry.css" />
+<link rel="shortcut icon" type="image/x-icon" href="../images/google-default.ico" />
+<title>Point Counter - Humans &amp; Heroes SRD</title>
+</head>
+<body>
+<div class="container-fluid">
+<div class="row">
+<div class="col-12 col-md-3 col-xl-2 sites-layout-sidebar-left">
+<p>Please enable JavaScript in order to see the generated sidebar.
+Without it you'll have to use the <a href="../site-map.html">sitemap</a> in order easily navigate.</p>
+
+<p>sideBar.js is harmless: it simply generates hyperlinks to major pages. It exists in a single place so that
+I don't have to update 100+ html pages with relative links whenever I want to change it.</p>
+</div>
+<script type="text/javascript" src="../themes/sideBar.js"></script>
+<main class="col-12 col-md-9 col-xl-10">
+<div class="d-lg-none">
+<div class="red-panel">
+<h3>Warning</h3>
+<div>This page is confusing for small screens and inconvenient for on-screen keyboards.</div>
+</div>
+<br />
+</div>
+<div class="character-sheet">
+<div class="character-sheet-top">
+<div class="row">
+<div class="container-fluid">
+<div class="row">
+<h1 class="col-12 col-sm-7 character-sheet-hero-name"><input type="text" id="hero-name" value="Hero Name" /></h1>
+<div class="col-12 col-sm-3"><label id="transcendence-span">Transcendence <input type="text" id="transcendence" size="1" value="0" onChange="Main.changeTranscendence();" /></label></div>
+<div class="col-2 character-sheet-power-level">PL&nbsp;<span id="power-level">0</span></div>
+</div>
+<div class="row">
+<input type="button" value="Clear Abilities" onClick="Main.abilitySection.clear();" />
+<input type="button" value="Clear All" onClick="Main.clear();" />
+</div>
+</div>
+</div>
+<div class="row align-items-center">
+<div class="character-sheet-ability-section col-12 col-lg-6 col-xl-8">
+<div class="row">
+<div class="col green-panel">
+<h3><label for="Strength">Strength</label></h3>
+<div><input type="text" id="Strength" size="1" value="0" onChange="Main.abilitySection.getByName('Strength').change();" /></div>
+</div>
+<div class="col green-panel">
+<h3><label for="Agility">Agility</label></h3>
+<div><input type="text" id="Agility" size="1" value="0" onChange="Main.abilitySection.getByName('Agility').change();" /></div>
+</div>
+<div class="col green-panel">
+<h3><label for="Fighting">Fighting</label></h3>
+<div><input type="text" id="Fighting" size="1" value="0" onChange="Main.abilitySection.getByName('Fighting').change();" /></div>
+</div>
+<div class="col green-panel">
+<h3><label for="Dexterity">Dexterity</label></h3>
+<div><input type="text" id="Dexterity" size="1" value="0" onChange="Main.abilitySection.getByName('Dexterity').change();" /></div>
+</div>
+</div>
+<div class="row">
+<div class="col green-panel">
+<h3><label for="Stamina">Stamina</label></h3>
+<div><input type="text" id="Stamina" size="1" value="0" onChange="Main.abilitySection.getByName('Stamina').change();" /></div>
+</div>
+<div class="col green-panel">
+<h3><label for="Intellect">Intellect</label></h3>
+<div><input type="text" id="Intellect" size="1" value="0" onChange="Main.abilitySection.getByName('Intellect').change();" /></div>
+</div>
+<div class="col green-panel">
+<h3><label for="Awareness">Awareness</label></h3>
+<div><input type="text" id="Awareness" size="1" value="0" onChange="Main.abilitySection.getByName('Awareness').change();" /></div>
+</div>
+<div class="col green-panel">
+<h3><label for="Presence">Presence</label></h3>
+<div><input type="text" id="Presence" size="1" value="0" onChange="Main.abilitySection.getByName('Presence').change();" /></div>
+</div>
+</div>
+</div>
+<div class="col-12 col-lg-6 col-xl-4">
+<img src="../images/Sirocco.png" id="character-image" />
+<br />
+<form action="javascript:void(0);">
+<label>Image Path: <input type="text" value="../images/Sirocco.png" id="img-file-path" /></label>
+<input type="submit" value="Load Image From Path" onClick="Main.loadImageFromPath();" />
+</form><br />
+<input type="file" accept="image/*" id="img-file-chooser" /><input type="button" value="Load Image From File" onClick="Main.loadImageFromFile();" />
+</div>
+</div>
+</div>
+<div class="row">
+<div class="character-sheet-section-label col">Powers <input type="button" value="Clear Powers" onClick="Main.powerSection.clear();" /></div>
+</div>
+<div class="row">
+<div class="character-sheet-light-green col">
+<div id="power-section"></div>
+</div>
+</div>
+<div class="row">
+<div class="character-sheet-section-label col">
+Equipment <input type="button" value="Clear Equipment" onClick="Main.equipmentSection.clear();" />
+<span id="equipment-points-used">0</span> / <span id="equipment-points-max">0</span>
+</div>
+</div>
+<div class="row">
+<div class="character-sheet-light-green col">
+<div id="equipment-section"></div>
+</div>
+</div>
+<div class="row">
+<div class="character-sheet-section-label col">Advantages <input type="button" value="Clear Advantages" onClick="Main.advantageSection.clear();" /></div>
+</div>
+<div class="row">
+<div class="character-sheet-light-green col">
+<div id="advantage-section"></div>
+</div>
+</div>
+<div class="row">
+<div class="character-sheet-section-label col">Skills <input type="button" value="Clear Skills" onClick="Main.skillSection.clear();" /></div>
+</div>
+<div class="row">
+<div class="character-sheet-light-green col">
+<div id="skill-section"></div>
+</div>
+</div>
+<div class="row">
+<div class="character-sheet-section-label col">Offense</div>
+</div>
+<div class="row">
+<div class="character-sheet-initiative col">Initiative <span id="initiative">+0</span></div>
+</div>
+<div id="offensive-section"></div>
+<div class="row">
+<div class="character-sheet-section-label col">Defense <input type="button" value="Clear Defenses" onClick="Main.defenseSection.clear();" /></div>
+</div>
+<div class="row character-sheet-defense-green">
+<div class="col-6 col-sm-3"><label for="Dodge-input">Dodge</label></div>
+<div class="col-6 col-sm-3"><span id="Dodge-start">0</span> +&nbsp;<input type="text" id="Dodge-input" size="1" value="0"
+onChange="Main.defenseSection.getByName('Dodge').change();" /> =&nbsp;<span id="Dodge-final">0</span></div>
+<div class="col-6 col-sm-3"><label for="Parry-input">Parry</label></div>
+<div class="col-6 col-sm-3"><span id="Parry-start">0</span> +&nbsp;<input type="text" id="Parry-input" size="1" value="0"
+onChange="Main.defenseSection.getByName('Parry').change();" /> =&nbsp;<span id="Parry-final">0</span></div>
+</div>
+<div class="row character-sheet-defense-white">
+<div class="col-6 col-sm-3"><label for="Will-input">Will</label></div>
+<div class="col-6 col-sm-3"><span id="Will-start">0</span> +&nbsp;<input type="text" id="Will-input" size="1" value="0"
+onChange="Main.defenseSection.getByName('Will').change();" /> =&nbsp;<span id="Will-final">0</span></div>
+<div class="col-6 col-sm-3"><label for="Fortitude-input">Fortitude</label></div>
+<div class="col-6 col-sm-3"><span id="Fortitude-start">0</span> +&nbsp;<input type="text" id="Fortitude-input" size="1" value="0"
+onChange="Main.defenseSection.getByName('Fortitude').change();" /> =&nbsp;<span id="Fortitude-final">0</span></div>
+</div>
+<div class="row character-sheet-defense-green">
+<div class="col-6 col-sm-3">Toughness</div>
+<div class="col-6 col-sm-3"><span id="Toughness">0</span></div>
+<div class="col"></div>
+</div>
+<div class="row character-sheet-point-totals">Character Point Totals: Abilities&nbsp;<span id="ability-total">0</span> &#8226;
+Powers&nbsp;<span id="power-total">0</span> &#8226; Advantages&nbsp;<span id="advantage-total">0</span> &#8226;
+Skills&nbsp;<span id="skill-total">0</span> &#8226; Defenses&nbsp;<span id="defense-total">0</span>
+=&nbsp;<span id="grand-total-used">0</span> /&nbsp;<span id="grand-total-max">0</span></div>
+</div>
+<br />
+<textarea id="bio-box">Complications, background and other information</textarea>
+<br /><br />
+<!--value of ruleset and latest-ruleset are set at the bottom of this file-->
+<label>Rules: <input type="text" id="ruleset" size="4" onChange="Main.changeRuleset();" /></label>
+Note that only the <a href="../meta/versioning.html">most recent rules</a> (<span id="latest-ruleset"></span>) are fully supported.
+<h2>Usage Notes</h2>
+<div>
+This page assumes you know all of the rules.<br />
+If you don't know what Transcendence is then leave it at 0 and ignore it.<br />
+There is no option for Transcendent equipment since God-like powers don't exist in mundane common items that can be
+easily obtained.<br />
+Power level is automatically set to the lowest possible value.<br />
+Transcendence is automatically set to the lowest possible value using user input as the minimum value (with a default minimum of 0).<br />
+Ranks in the Equipment Advantage are also automatically set to the lowest possible whenever the equipment section is
+changed.<br />
+Devices are created in the power section using removable.<br />
+The Image Path input box can be absolute or relative (to the file). Only this can be saved (for security reasons) and
+not any image given to the file upload button.<br />
+Some modifiers (such as those that change range, action, and duration) are automatically set and can't be set manually.
+Change the drop downs for range etc instead.<br />
+In order to lack an ability put "--" in the ability input (without the quotes).<br />
+Redundant powers, equipment, advantages and skills (those with the same type and subtype) are automatically removed.
+<br />
+To buy equipment that has no impact on any other section (including a vehicle or HQ) you may use Feature.<br />
+This counter doesn't have a direct option for applying modifiers to existing traits, such as Impervious Toughness, you
+may use Feature of the same cost to represent these (fill in the text).<br />
+You must spend points in whole numbers, if you have an odd number of total ranks in skills you will see a half point.
+<br />
+The text area below is for loading and saving data. It is also cleared out on load in order to display error messages.<br />
+Modifiers and advantages will show ranks for number of applications. If the cost isn't 1:1, the total will be to the right.<br />
+There is no easy way to have enhanced trait affect other areas so instead apply the traits where needed and make a note
+of how many are enhanced.<br />
+There are some bugs I am aware of. Hopefully they won't be an issue.<br />
+</div>
+<br />
+<input type="button" value="Export to text (Markdown)" onClick="Main.exportToMarkdown();" id="export-button" /><br />
+<span onClick="Main.saveToFile();"><a href="javascript:alert('This link changes to data as you click it');" download="" id="save-to-file-link">Save to File</a></span>
+<!--Couldn't get the button to work which is why this is the only link-->
+<!--<span onClick="Main.saveToFile();"><a href="data:" download="" id="save-to-file-link"><input type="button" value="Save to File" /></a></span>-->
+<input type="button" value="Save To Text Area" onClick="Main.saveToTextArea();" id="save-text-button" />
+<br />
+<input type="file" id="file-chooser" accept=".xml,.js,.json" /><br />
+<input type="button" value="Load from File" onClick="Main.loadFile();" />
+<input type="button" value="Load from Text Area" onClick="Main.loadFromTextArea();" id="load-text-button" /><br />
+<br />
+<textarea id="code-box"></textarea>
+<br /><br />
+<script type="text/javascript" src="../minorVersion.js"></script>
+<script type="text/javascript">var Main;</script>
+<script type="text/javascript" src="javascript/main.js"></script>
+<script type="text/javascript" src="javascript/polyfill.js"></script>
+<script type="text/javascript" src="javascript/MapDefault.js"></script>
+<script type="text/javascript" src="javascript/Version.js"></script>
+<script type="text/javascript" src="javascript/data.js"></script>
+<!--
+the above few are first because everything depends on data which depends on MapDefault and Version (polyfill is first for safety)
+everything else below is alphabetical
+-->
+<script type="text/javascript" src="javascript/abilities.js"></script>
+<script type="text/javascript" src="javascript/advantageList.js"></script>
+<script type="text/javascript" src="javascript/advantageRow.js"></script>
+<script type="text/javascript" src="javascript/CommonsLibrary.js"></script>
+<script type="text/javascript" src="javascript/conversions.js"></script>
+<script type="text/javascript" src="javascript/defenses.js"></script>
+<script type="text/javascript" src="javascript/htmlGenerator.js"></script>
+<script type="text/javascript" src="javascript/modifierList.js"></script>
+<script type="text/javascript" src="javascript/modifierRow.js"></script>
+<script type="text/javascript" src="javascript/powerList.js"></script>
+<script type="text/javascript" src="javascript/powerRow.js"></script>
+<script type="text/javascript" src="javascript/prototypes.js"></script>
+<script type="text/javascript" src="javascript/SelectUtil.js"></script>
+<script type="text/javascript" src="javascript/skillList.js"></script>
+<script type="text/javascript" src="javascript/skillRow.js"></script>
+<script type="text/javascript">
+//Main must be created after all functions have been defined
+Main = new MainObject();
+Object.freeze(Main);
+Main.clear();  //in case the browser has cached some fields (wrong totals and onChange won't work) all other fields can stay as is
+document.getElementById('ruleset').value = Main.getLatestRuleset().toString();
+document.getElementById('latest-ruleset').innerHTML = Main.getLatestRuleset().toString();
+</script>
+<script type="text/javascript" src="../examples/characters/characterFormParsing.js"></script>
+<script type="text/javascript" src="javascript/autoLoading.js"></script>
+<!--
+==============================================
+don't include these scripts in production to save memory (like half the files)
+Miscellaneous repo only works locally
+==============================================
+--
+<script type="text/javascript" src="../examples/characters/characterForm.js"></script>
+<h2>Admin Powers</h2>
+<script type="text/javascript" src="../../Miscellaneous/src/main/javascript/testRunner.js"></script>
+<script type="text/javascript" src="javascript/test/root.js"></script>
+<script type="text/javascript" src="javascript/test/data.js"></script>
+<script type="text/javascript" src="javascript/test/abilities.js"></script>
+<script type="text/javascript" src="javascript/test/advantageList.js"></script>
+<script type="text/javascript" src="javascript/test/advantageRow.js"></script>
+<script type="text/javascript" src="javascript/test/characterForm.js"></script>
+<script type="text/javascript" src="javascript/test/characterFormParsing.js"></script>
+<script type="text/javascript" src="javascript/test/CommonsLibrary.js"></script>
+<script type="text/javascript" src="javascript/test/conversions.js"></script>
+<script type="text/javascript" src="javascript/test/defenses.js"></script>
+<script type="text/javascript" src="javascript/test/htmlGenerator.js"></script>
+<script type="text/javascript" src="javascript/test/main.js"></script>
+<script type="text/javascript" src="javascript/test/modifierList.js"></script>
+<script type="text/javascript" src="javascript/test/modifierRow.js"></script>
+<script type="text/javascript" src="javascript/test/powerList.js"></script>
+<script type="text/javascript" src="javascript/test/powerRow.js"></script>
+<script type="text/javascript" src="javascript/test/SelectUtil.js"></script>
+<script type="text/javascript" src="javascript/test/skillList.js"></script>
+<script type="text/javascript" src="javascript/test/skillRow.js"></script>
+<script type="text/javascript" src="javascript/test/Version.js"></script>
+<script type="text/javascript" src="javascript/test/testTools.js"></script>
+<script type="text/javascript" src="../../Miscellaneous/src/main/javascript/unstableSort.js"></script>
+<br />
+<form action="javascript:void(0);">
+<input type="text" value="TestRunner.testAll();" id="command-text" />
+<input type="submit" value="Execute" onClick="eval(document.getElementById('command-text').value);" /><br />
+</form>
+<script>
+function convertToJsFile()
+{
+   var jsDoc = Main.save();
+   jsDoc.Information = '';
+   var stringDoc = JSON.stringify(jsDoc);
+   stringDoc = stringDoc.replace(/,/g, ',\n').replace(/\[{/g, '[\n{').replace(/}]/g, '}\n]');
+   stringDoc = 'var json = ' + stringDoc + ';\n';
+   document.getElementById('code-box').value = stringDoc;
+   location.hash = '#code-box';
+}
+</script>
+<a href="javascript:convertToJsFile();">Convert to JS file</a><br />
+<a href="?includeJsCharacterFile=javascript%2Ftest%2FLoadMe.js">Load me form</a>
+<a href="?includeJsCharacterFile=javascript%2Ftest%2FLoadMeWithGodhood.js">with godhood</a><br />
+<a href="javascript:TestRunner.testAll();">Test All</a><br />
+<a href="javascript:eval(document.getElementById('code-box').value);">Eval Code Box</a> (above)<br />
+testResults:<br />
+<textarea id="testResults"></textarea>
+<br /><br /><br /><br /><br /><br /><br /><br />
+<!---->
+</main>
+</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+</body>
+</html>
