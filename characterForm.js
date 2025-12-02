@@ -1,134 +1,59 @@
 'use strict';
-TestSuite.characterForm = {};
-TestSuite.characterForm.adjustLink = async function (testState={})
+var originalHref;
+
+function adjustLink(formId, linkId)
 {
-   TestRunner.clearResults(testState);
-   var assertions = [], form, link, returnValue;
+   var form = document.getElementById(formId);
+   var link = document.getElementById(linkId);
+   originalHref = testableAdjustLink(form, link, originalHref);
+}
 
-   //don't create elements so I can tell that the object wasn't changed
-   form = {elements: {}};
-   link = {href: 'current'};
-   returnValue = testableAdjustLink(form, link, 'original');
-   assertions.push(
-      {
-         Expected: {elements: {}},
-         Actual: form,
-         Description: 'empty form: form not changed'
-      });
-   assertions.push(
-      {
-         Expected: {href: 'original'},
-         Actual: link,
-         Description: 'empty form with href: link reverted'
-      });
-   assertions.push(
-      {
-         Expected: 'original',
-         Actual: returnValue,
-         Description: 'empty form with href: returned same href'
-      });
-
-   form = {elements: {}};
-   link = {href: 'current'};
-   returnValue = testableAdjustLink(form, link, undefined);
-   assertions.push(
-      {
-         Expected: {href: 'current'},
-         Actual: link,
-         Description: 'empty form no href: link not changed'
-      });
-   assertions.push(
-      {
-         Expected: 'current',
-         Actual: returnValue,
-         Description: 'empty form no href: returned link href'
-      });
-
-   form = {elements: {option0: {value: 2}, checkbox0: {checked: true}, string0: {value: 'j i'}}};
-   link = {href: 'current'};
-   testableAdjustLink(form, link, 'original?a=1');
-   assertions.push(
-      {
-         Expected: {elements: {option0: {value: 2}, checkbox0: {checked: true}, string0: {value: 'j i'}}},
-         Actual: form,
-         Description: '1 each form: form not changed'
-      });
-   assertions.push(
-      {
-         Expected: {href: 'original?a=1&options=2&checkboxes=1&strings=%22j%20i%22'},
-         Actual: link,
-         Description: '1 each form: link changed'
-      });
-
-   function parseHtml(htmlString)
+/**Expectations for mocked elements:
+ * @param {object} form: {elements: {option#: undefined or {value: number}, checkbox#: undefined or {checked:
+ *    boolean}, string#: undefined or {value: string}}}
+ * @param {object} link: {href: string}
+ * @param {string?} paramOriginalHref pass in originalHref
+ * @return {string} new value for originalHref (link was already updated)
+ */
+function testableAdjustLink(form, link, paramOriginalHref)
+{
+   var options = [];
+   for (var optionIndex = 0; undefined !== form.elements['option' + optionIndex]; ++optionIndex)
    {
-      return document.createRange()
-      .createContextualFragment(htmlString).firstChild;
+      options.push(form.elements['option' + optionIndex].value);
+   }
+   if (0 === options.length) options = '';
+   //dot separated number array because . isn't escaped
+   else options = '&options=' + options.toString().replace(/,/g, '.');
+
+   var checkboxes = [];
+   for (var checkboxIndex = 0; undefined !== form.elements['checkbox' + checkboxIndex]; ++checkboxIndex)
+   {
+      //encode boolean array into binary (no commas etc) for compactness
+      checkboxes.push(form.elements['checkbox' + checkboxIndex].checked ? '1' : '0');
+   }
+   if (0 === checkboxes.length) checkboxes = '';
+   else checkboxes = '&checkboxes=' + checkboxes.toString().replace(/,/g, '');
+
+   var strings = [];
+   for (var stringIndex = 0; undefined !== form.elements['string' + stringIndex]; ++stringIndex)
+   {
+      strings.push(form.elements['string' + stringIndex].value);
+   }
+   if (0 === strings.length) strings = '';
+   else
+   {
+      //must stringify because strings can contain anything.
+      //likewise can't avoid comma separated but can remove braces
+      var uriComponent = JSON.stringify(strings);
+      //using replace /^\[/ then /]$/ is less confusing then /^\[|]$/g which also works
+      //using substring is more simple still (removes first and last characters)
+      uriComponent = uriComponent.substring(1, uriComponent.length - 1);
+      strings = '&strings=' + encodeURIComponent(uriComponent);
    }
 
-   form = parseHtml('<form>' +
-      '<input type="radio" name="option0" value="1"/>' +
-      '<input type="radio" name="option0" checked value="2"/>' +
-      '<input type="checkbox" name="checkbox0" checked />' +
-      '<input type="text" name="string0" value="j i"/>' +
-      '</form>');
-   link = parseHtml('<a href="current">link</a>');
-   //real href needs a full path to avoid being changed to one
-   testableAdjustLink(form, link, 'http://a/?b=1');
-   assertions.push(
-      {
-         Expected: 'http://a/?b=1&options=2&checkboxes=1&strings=%22j%20i%22',
-         Actual: link.href,
-         Description: '1 each real form: link changed'
-      });
+   if (undefined === paramOriginalHref) paramOriginalHref = link.href;
+   link.href = paramOriginalHref + options + checkboxes + strings;
 
-   form = parseHtml('<form>' +
-      '<input type="radio" name="option0" value="7"/>' +
-      '<input type="radio" name="option0" checked value="2"/>' +
-      '<input type="radio" name="option1" value="7"/>' +
-      '<input type="radio" name="option1" checked value="5"/>' +
-      '<input type="radio" name="option2" checked value="1"/>' +
-      '<input type="radio" name="option2" value="7"/>' +
-      '</form>');
-   link = parseHtml('<a href="current">link</a>');
-   testableAdjustLink(form, link, 'http://a/?b=1');
-   assertions.push(
-      {
-         Expected: 'http://a/?b=1&options=2.5.1',
-         Actual: link.href,
-         Description: 'multiple options'
-      });
-
-   form = parseHtml('<form>' +
-      '<input type="checkbox1" name="checkbox0" checked />' +
-      '<input type="checkbox1" name="checkbox1" />' +
-      '<input type="checkbox1" name="checkbox2" />' +
-      '</form>');
-   link = parseHtml('<a href="current">link</a>');
-   testableAdjustLink(form, link, 'http://a/?b=1');
-   assertions.push(
-      {
-         Expected: 'http://a/?b=1&checkboxes=100',
-         Actual: link.href,
-         Description: 'multiple checkboxes'
-      });
-
-   form = parseHtml('<form>' +
-      '<input type="text" name="string0" value="j i"/>' +
-      //raw: "."
-      '<input type="text" name="string1" value="&quot;.&quot;"/>' +
-      //raw: \"
-      '<input type="text" name="string2" value="\\&quot;"/>' +
-      '</form>');
-   link = parseHtml('<a href="current">link</a>');
-   testableAdjustLink(form, link, 'http://a/?b=1');
-   assertions.push(
-      {
-         //decoded (note the stringify): http://a/?b=1&strings="j i","\".\"","\\\""
-         Expected: 'http://a/?b=1&strings=%22j%20i%22%2C%22%5C%22.%5C%22%22%2C%22%5C%5C%5C%22%22',
-         Actual: link.href,
-         Description: 'multiple strings'
-      });
-
-   return TestRunner.displayResults('TestSuite.characterForm.adjustLink', assertions, testState);
-};
+   return paramOriginalHref;
+}
